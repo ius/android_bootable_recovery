@@ -4,19 +4,6 @@
 #include "common.h"
 #include "extendedcommands.h"
 
-
-int device_toggle_display(volatile char* key_pressed, int key_code) {
-    int alt = key_pressed[KEY_LEFTALT] || key_pressed[KEY_RIGHTALT];
-    if (alt && key_code == KEY_L)
-        return 1;
-    // allow toggling of the display if the correct key is pressed, and the display toggle is allowed or the display is currently off
-    if (ui_get_showing_back_button()) {
-        return 0;
-        //return get_allow_toggle_display() && (key_code == KEY_HOME || key_code == KEY_MENU || key_code == KEY_END);
-    }
-    return get_allow_toggle_display() && (key_code == KEY_HOME || key_code == KEY_MENU || key_code == KEY_POWER || key_code == KEY_END);
-}
-
 // If a target lacks a suitable select button, use spare keys
 // to select menu items. Otherwise use these keys as back buttons
 int device_handle_spare_key()
