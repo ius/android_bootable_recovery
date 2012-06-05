@@ -436,11 +436,6 @@ get_menu_selection(char** headers, char** items, int menu_only,
     int selected = initial_selection;
     int chosen_item = -1;
 
-    // Some users with dead enter keys need a way to turn on power to select.
-    // Jiggering across the wrapping menu is one "secret" way to enable it.
-    // We can't rely on /cache or /sdcard since they may not be available.
-    int wrap_count = 0;
-
     while (chosen_item < 0 && chosen_item != GO_BACK) {
         int key = ui_wait_key();
         int visible = ui_text_visible();
@@ -487,21 +482,6 @@ get_menu_selection(char** headers, char** items, int menu_only,
             }
         } else if (!menu_only) {
             chosen_item = action;
-        }
-
-        if (abs(selected - old_selected) > 1) {
-            wrap_count++;
-            if (wrap_count == 3) {
-                wrap_count = 0;
-                if (ui_get_showing_back_button()) {
-                    ui_print("Back menu button disabled.\n");
-                    ui_set_showing_back_button(0);
-                }
-                else {
-                    ui_print("Back menu button enabled.\n");
-                    ui_set_showing_back_button(1);
-                }
-            }
         }
     }
 
