@@ -17,6 +17,21 @@ int device_toggle_display(volatile char* key_pressed, int key_code) {
     return get_allow_toggle_display() && (key_code == KEY_HOME || key_code == KEY_MENU || key_code == KEY_POWER || key_code == KEY_END);
 }
 
+// If a target lacks a suitable select button, use spare keys
+// to select menu items. Otherwise use these keys as back buttons
+int device_handle_spare_key()
+{
+#ifdef BOARD_HAS_NO_SELECT_BUTTON
+    return SELECT_ITEM;
+#else
+    if (ui_menu_level > 0) {
+        return GO_BACK;
+    } else {
+        return NO_ACTION;
+    }
+#endif
+}
+
 int device_handle_key(int key_code, int visible) {
     if (visible) {
         switch (key_code) {
@@ -33,13 +48,8 @@ int device_handle_key(int key_code, int visible) {
                 return HIGHLIGHT_UP;
 
             case KEY_POWER:
-                if (ui_get_showing_back_button()) {
-                    return SELECT_ITEM;
-                }
-                if (!get_allow_toggle_display() && ui_menu_level > 0) {
-                    return GO_BACK;
-                }
-                break;
+                return device_handle_spare_key();
+
             case KEY_LEFTBRACE:
             case KEY_ENTER:
             case BTN_MOUSE:
@@ -51,12 +61,8 @@ int device_handle_key(int key_code, int visible) {
             case KEY_END:
             case KEY_BACKSPACE:
             case KEY_SEARCH:
-                if (ui_get_showing_back_button()) {
-                    return SELECT_ITEM;
-                }
-                if (!get_allow_toggle_display() && ui_menu_level > 0) {
-                    return GO_BACK;
-                }
+                return device_handle_spare_key();
+
             case KEY_BACK:
                 if (ui_menu_level > 0) {
                     return GO_BACK;
