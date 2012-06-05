@@ -775,7 +775,7 @@ void show_nandroid_advanced_restore_menu(const char* path)
                             "Restore system",
                             "Restore data",
                             "Restore cache",
-                            "Restore sd-ext",
+                            "Restore custpack",
                             "Restore wimax",
                             NULL
     };
@@ -807,7 +807,7 @@ void show_nandroid_advanced_restore_menu(const char* path)
                 nandroid_restore(file, 0, 0, 0, 1, 0, 0);
             break;
         case 4:
-            if (confirm_selection(confirm_restore, "Yes - Restore sd-ext"))
+            if (confirm_selection(confirm_restore, "Yes - Restore custpack"))
                 nandroid_restore(file, 0, 0, 0, 0, 1, 0);
             break;
         case 5:
