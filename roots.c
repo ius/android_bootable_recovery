@@ -169,15 +169,21 @@ void load_volume_table() {
 
 Volume* volume_for_path(const char* path) {
     int i;
+    Volume* ret_vol = NULL;
+
     for (i = 0; i < num_volumes; ++i) {
         Volume* v = device_volumes+i;
         int len = strlen(v->mount_point);
+
+        // find volume with longest mount_point prefix in path
         if (strncmp(path, v->mount_point, len) == 0 &&
+            (!ret_vol || strlen(ret_vol->mount_point) < len) &&
             (path[len] == '\0' || path[len] == '/')) {
-            return v;
+            ret_vol = v;
         }
     }
-    return NULL;
+
+    return ret_vol;
 }
 
 int try_mount(const char* device, const char* mount_point, const char* fs_type, const char* fs_options) {
