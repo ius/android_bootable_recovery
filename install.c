@@ -338,6 +338,11 @@ static int
 really_install_package(const char *path)
 {
     ui_set_background(BACKGROUND_ICON_INSTALLING);
+
+    ui_print("Mounting system partitions...\n");
+    ensure_path_mounted("/system");
+    ensure_path_mounted("/system/app");
+
     ui_print("Finding update package...\n");
     ui_show_indeterminate_progress();
     LOGI("Update location: %s\n", path);
